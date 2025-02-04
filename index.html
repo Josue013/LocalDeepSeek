@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon"  href="https://images.seeklogo.com/logo-png/61/2/deepseek-ai-icon-logo-png_seeklogo-611473.png"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>LocalDeepSeek</title>
+
+  <!-- Cargar Monaco Editor -->
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/loader.js"></script>
+  <script>
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' }});
+    window.MonacoEnvironment = {
+      getWorkerUrl: function(workerId, label) {
+        return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+          self.MonacoEnvironment = {
+            baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/'
+          };
+          importScripts('https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/base/worker/workerMain.js');`
+        )}`;
+      }
+    };
+    require(['vs/editor/editor.main'], function() {
+      window.editor = monaco.editor.create(document.getElementById('editor'), {
+        language: 'none',
+        theme: 'vs-dark',
+        automaticLayout: true
+      });
+    });
+  </script>
+  <script src="main.js"></script>
+</head>
+<body>
+  <h1>LocalDeepSeek</h1>
+  <button class="styled-button" onclick="send()">Enviar</button>
+  <div class="container">
+    <div id="editor" class="editor"></div>
+    <div id="output" class="output">
+      <strong>Pensamiento: </strong> <p id="think"></p>
+      <strong>Salida: </strong> <p id="salida"></p>
+    </div>
+  </div>
+</body>
+</html>
